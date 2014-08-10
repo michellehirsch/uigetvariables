@@ -213,7 +213,7 @@ elseif ~isempty(types)
     % User specified types.  Assume didn't specify valfcn
 
     % Allow for single prompt with single type as a string
-    if length(types)==1  
+    if ischar(types)  
         types = {types};
     end
     
@@ -247,6 +247,7 @@ if ~specifiedValidationFcn
     isnumericfcn = @(var) isnumeric(var);
     islogicalfcn = @(var) islogical(var);
     isstringfcn = @(var) ischar(var) | iscellstr(var);
+    istablefcn = @(var) istable(var);
 
     valfcn = cell(1,nPrompts);
     
@@ -261,6 +262,8 @@ if ~specifiedValidationFcn
                 valfcn{ii} = islogicalfcn;
             case 'string'
                 valfcn{ii} = isstringfcn;
+            case 'table'
+                valfcn{ii} = istablefcn;
             otherwise
                 valfcn{ii} = isanyfcn;
         end
